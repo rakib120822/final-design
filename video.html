@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Video briefing room — Global Bioenergy Watch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --mist:#eef3f7;
+  --paper:#ffffff;
+  --ink:#0e2a43;
+  --ink-2:#4c6278;
+  --ink-3:#7b8ea0;
+  --line:#d6e1ea;
+  --leaf:#178a6b;
+  --leaf-soft:#e3f4ee;
+  --market:#2563a8;
+  --market-soft:#e6effa;
+  --policy:#b4233c;
+  --policy-soft:#fdecef;
+  --up:#178a6b;
+  --down:#b4233c;
+  --ink-deep:#0a1f33;
+
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+
+  --radius-lg:18px;
+  --radius-md:12px;
+  --focus-r:6px;
+
+  --shadow-card:0 12px 30px -22px rgba(14,42,67,.55);
+  --shadow-hover:0 20px 40px -22px rgba(14,42,67,.65);
+
+  --nav-h:118px;
+}
+
+/* ============================================================
+   RESET / BASE
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:var(--nav-h);scroll-behavior:smooth}
+body{
+  font-family:var(--body);
+  color:var(--ink);
+  background:var(--mist);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+ul{list-style:none}
+input{font:inherit;color:inherit}
+
+:focus-visible{outline:2px solid var(--leaf);outline-offset:3px;border-radius:var(--focus-r)}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.88);
+  -webkit-backdrop-filter:saturate(1.4) blur(14px);
+          backdrop-filter:saturate(1.4) blur(14px);
+  border-bottom:1px solid var(--line);
+  transition:box-shadow .25s ease;
+}
+.nav.scrolled{box-shadow:0 12px 30px -22px rgba(14,42,67,.55)}
+
+.nav-row-a{
+  display:flex;
+  align-items:center;
+  gap:32px;
+  padding:12px 28px;
+  max-width:1600px;
+  margin:0 auto;
+}
+.brand{display:flex;align-items:center;gap:11px;flex-shrink:0}
+.brand-mark{
+  width:34px;height:34px;border-radius:50%;
+  background:conic-gradient(from 210deg,var(--leaf),var(--market),var(--leaf));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-family:var(--display);font-weight:700;font-size:13px;
+  flex-shrink:0;
+}
+.brand-text{display:flex;flex-direction:column;line-height:1.12}
+.brand-name{font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink);letter-spacing:-.01em}
+.brand-tag{font-size:10.5px;color:var(--ink-3);font-weight:500}
+
+.nav-links{display:flex;align-items:center;gap:6px;margin-left:auto}
+.nav-link{
+  padding:7px 13px;border-radius:999px;font-size:13.5px;font-weight:500;
+  color:var(--ink-2);transition:background .15s ease,color .15s ease;
+  white-space:nowrap;
+}
+.nav-link:hover{background:var(--mist);color:var(--ink)}
+.nav-link.active{background:var(--leaf-soft);color:var(--leaf);font-weight:600}
+.nav-link.more{display:inline-flex;align-items:center;gap:5px}
+.nav-link.more svg{width:11px;height:11px}
+
+.nav-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.btn-rescan{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:7px 14px;border-radius:999px;
+  border:1px solid var(--line);background:var(--paper);
+  font-size:13px;font-weight:500;color:var(--ink-2);
+  transition:border-color .15s ease,color .15s ease;
+}
+.btn-rescan:hover{border-color:var(--ink-3);color:var(--ink)}
+.btn-rescan svg{width:13px;height:13px}
+
+.avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--leaf-soft);color:var(--leaf);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-weight:700;font-size:12.5px;
+  flex-shrink:0;
+}
+
+/* Ticker bar (flat, static, evenly spread) */
+.nav-row-b{
+  border-top:1px solid var(--line);
+  background:rgba(255,255,255,.6);
+}
+.ticker-wrap{
+  display:flex;align-items:center;gap:22px;
+  padding:8px 28px;max-width:1600px;margin:0 auto;
+}
+.ticker-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12.5px;font-weight:700;color:var(--ink);flex-shrink:0;
+}
+.ticker-dot{width:6px;height:6px;border-radius:50%;background:var(--leaf)}
+.ticker-items{
+  display:flex;align-items:baseline;
+  flex:1;
+  gap:22px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  justify-content:space-between;
+}
+.ticker-items::-webkit-scrollbar{display:none}
+.ticker-item{display:inline-flex;align-items:baseline;gap:6px;font-size:12px;white-space:nowrap}
+.ticker-name{color:var(--ink-3);font-weight:500}
+.ticker-val{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.ticker-chg{font-weight:600;font-variant-numeric:tabular-nums}
+.ticker-chg.up{color:var(--up)}
+.ticker-chg.down{color:var(--down)}
+.ticker-scan{font-size:12px;color:var(--ink-3);flex-shrink:0;white-space:nowrap}
+
+/* ============================================================
+   PAGE SHELL
+   ============================================================ */
+.shell{max-width:1600px;margin:0 auto;padding:24px 28px 72px}
+
+.eyebrow-row{
+  display:flex;align-items:center;gap:10px;
+  font-size:12px;color:var(--ink-3);margin-bottom:14px;
+}
+.eyebrow-row .sep{opacity:.5}
+.eyebrow-row a:hover{color:var(--leaf)}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  position:relative;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-card);
+  padding:32px;
+  transform-style:preserve-3d;
+  transition:transform .35s ease,box-shadow .35s ease;
+  will-change:transform;
+}
+.hero-inner{transform:translateZ(24px)}
+.hero-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 11px;border-radius:999px;
+  background:var(--leaf-soft);color:var(--leaf);
+  font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  margin-bottom:16px;
+}
+.hero h1{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(32px,5vw,56px);
+  line-height:1.05;letter-spacing:-.02em;color:var(--ink);
+  margin-bottom:14px;
+}
+.hero-sub{color:var(--ink-2);font-size:16px;max-width:62ch;margin-bottom:28px}
+
+.video-frame{
+  position:relative;aspect-ratio:16/9;width:100%;
+  border-radius:var(--radius-md);overflow:hidden;
+  background:linear-gradient(160deg,#0d1b2b 0%,#132a44 55%,#0a1f33 100%);
+  border:1px solid var(--line);
+}
+.video-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:radial-gradient(circle at 50% 45%,#000 30%,transparent 78%);
+  -webkit-mask-image:radial-gradient(circle at 50% 45%,#000 30%,transparent 78%);
+}
+.video-center{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:12px;text-align:center;padding:24px;
+}
+.video-mark{display:flex;align-items:center;gap:14px;color:#fff}
+.video-mark .dm{width:14px;height:14px;background:#e8b84b;transform:rotate(45deg);border-radius:2px}
+.video-mark .wm{font-family:var(--display);font-weight:700;font-size:clamp(28px,4.2vw,52px);letter-spacing:-.02em}
+.video-kicker{color:#e8b84b;font-size:12px;font-weight:600;letter-spacing:.32em;text-transform:uppercase}
+.video-rule{width:min(420px,60%);height:1px;background:linear-gradient(90deg,transparent,rgba(232,184,75,.55),transparent);margin-top:6px}
+.video-tags{display:flex;gap:22px;color:rgba(255,255,255,.55);font-size:11px;letter-spacing:.28em;text-transform:uppercase;margin-top:4px}
+.video-play{
+  position:absolute;left:20px;bottom:16px;display:flex;align-items:center;gap:10px;
+  color:#fff;font-size:13px;font-weight:500;
+}
+.video-play .tri{
+  width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;
+}
+.video-play .tri::after{content:"";border-left:7px solid #fff;border-top:5px solid transparent;border-bottom:5px solid transparent;margin-left:2px}
+.video-ctrl{position:absolute;right:18px;bottom:16px;display:flex;gap:14px;color:rgba(255,255,255,.7)}
+.video-ctrl svg{width:16px;height:16px}
+
+/* ============================================================
+   FILTER BAR
+   ============================================================ */
+.filters{
+  background:var(--paper);border:1px solid var(--line);
+  border-radius:var(--radius-md);box-shadow:var(--shadow-card);
+  padding:12px 16px;margin-top:20px;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.filter-group-label{font-size:12px;color:var(--ink-3);font-weight:600;margin-right:4px}
+.chip{
+  display:inline-flex;align-items:center;
+  padding:6px 13px;border-radius:999px;
+  font-size:12.5px;font-weight:500;
+  border:1px solid var(--line);background:var(--paper);color:var(--ink-2);
+  transition:background .15s ease,color .15s ease,border-color .15s ease;
+}
+.chip:hover{border-color:var(--ink-3);color:var(--ink)}
+.chip.market{background:var(--market-soft);color:var(--market);border-color:var(--market-soft)}
+.chip.leaf{background:var(--leaf-soft);color:var(--leaf);border-color:var(--leaf-soft)}
+.chip.policy{background:var(--policy-soft);color:var(--policy);border-color:var(--policy-soft)}
+.chip.active{background:var(--leaf);color:var(--paper);border-color:var(--leaf)}
+
+/* ============================================================
+   MAIN LAYOUT
+   ============================================================ */
+.layout{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:24px;
+  margin-top:24px;
+  align-items:start;
+}
+
+/* Filter rail */
+.rail{position:sticky;top:calc(var(--nav-h) + 16px);display:flex;flex-direction:column;gap:14px}
+.rail-card{
+  background:var(--paper);border:1px solid var(--line);
+  border-radius:var(--radius-md);box-shadow:var(--shadow-card);
+  padding:16px;
+}
+.rail-card h3{
+  font-family:var(--display);font-weight:600;font-size:13px;
+  color:var(--ink);margin-bottom:10px;letter-spacing:-.01em;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.rail-card h3 .count{font-family:var(--body);font-weight:500;font-size:11px;color:var(--ink-3)}
+.rail-list{display:flex;flex-direction:column;gap:2px}
+.rail-item{
+  display:flex;align-items:center;gap:9px;
+  padding:6px 8px;border-radius:8px;
+  font-size:13px;color:var(--ink-2);cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+.rail-item:hover{background:var(--mist);color:var(--ink)}
+.rail-item input{
+  appearance:none;-webkit-appearance:none;
+  width:15px;height:15px;border-radius:4px;
+  border:1.5px solid var(--line);background:var(--paper);
+  flex-shrink:0;position:relative;cursor:pointer;
+  transition:background .15s ease,border-color .15s ease;
+}
+.rail-item input:checked{background:var(--leaf);border-color:var(--leaf)}
+.rail-item input:checked::after{
+  content:"";position:absolute;left:4px;top:1px;
+  width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
+}
+.rail-item input:focus-visible{outline:2px solid var(--leaf);outline-offset:2px;border-radius:4px}
+
+/* Feed area */
+.feed{display:flex;flex-direction:column;gap:16px;min-width:0}
+
+.feed-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.feed-head h2{font-family:var(--display);font-weight:700;font-size:22px;color:var(--ink);letter-spacing:-.01em}
+.feed-head p{font-size:13px;color:var(--ink-3);margin-top:2px}
+.btn-refresh{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 14px;border-radius:999px;
+  border:1px solid var(--line);background:var(--paper);
+  font-size:13px;font-weight:500;color:var(--ink-2);
+  transition:border-color .15s ease,color .15s ease;
+}
+.btn-refresh:hover{border-color:var(--ink-3);color:var(--ink)}
+.btn-refresh svg{width:14px;height:14px}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:20px;
+}
+
+/* Video card */
+.vcard{
+  background:var(--paper);border:1px solid var(--line);
+  border-radius:var(--radius-md);box-shadow:var(--shadow-card);
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:transform .2s ease,box-shadow .2s ease;
+  opacity:0;animation:fadeUp .4s ease forwards;
+}
+.vcard:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.vthumb{
+  position:relative;aspect-ratio:16/9;background:var(--mist);overflow:hidden;
+}
+.vthumb .ph{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#e6effa,#e3f4ee);
+  color:var(--ink-3);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
+}
+.vthumb .dur{
+  position:absolute;right:8px;bottom:8px;
+  padding:2px 7px;border-radius:6px;
+  background:rgba(14,42,67,.82);color:#fff;font-size:11px;font-weight:600;
+}
+.vthumb .src{
+  position:absolute;left:8px;bottom:8px;
+  padding:3px 8px;border-radius:999px;
+  background:rgba(255,255,255,.92);border:1px solid var(--line);
+  font-size:10px;font-weight:600;color:var(--ink-2);
+}
+.vbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.vtitle{
+  font-family:var(--display);font-weight:600;font-size:14px;line-height:1.3;
+  color:var(--ink);letter-spacing:-.005em;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  min-height:2.6em;
+}
+.vmeta{font-size:12px;color:var(--ink-3);display:flex;gap:6px;align-items:center;margin-top:auto}
+.vmeta .dot{width:3px;height:3px;border-radius:50%;background:var(--ink-3);opacity:.6}
+
+/* Skeleton */
+.skel{
+  background:var(--paper);border:1px solid var(--line);
+  border-radius:var(--radius-md);overflow:hidden;
+}
+.skel .bar{
+  background:linear-gradient(90deg,var(--mist) 0%,#f6f9fc 50%,var(--mist) 100%);
+  background-size:200% 100%;
+  animation:shimmer 1.4s ease-in-out infinite;
+}
+.skel .thumb-bar{aspect-ratio:16/9;width:100%}
+.skel .line{height:12px;border-radius:6px;margin:12px 14px 0}
+.skel .line.short{width:50%}
+.skel .line:last-child{margin-bottom:14px}
+
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* Sentinel / end */
+.sentinel{height:1px}
+.end-marker{
+  text-align:center;color:var(--ink-3);font-size:13px;
+  padding:32px 0 8px;
+}
+.load-more{
+  display:none;margin:16px auto 0;
+  padding:10px 20px;border-radius:999px;
+  border:1px solid var(--line);background:var(--paper);
+  font-size:13px;font-weight:500;color:var(--ink-2);
+}
+
+/* ============================================================
+   COUNTRY / CHANNEL GRID
+   ============================================================ */
+.section{margin-top:44px}
+.section-head{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+  margin-bottom:16px;flex-wrap:wrap;
+}
+.section-head h2{font-family:var(--display);font-weight:700;font-size:22px;color:var(--ink);letter-spacing:-.01em}
+.section-head .lead{font-size:13px;color:var(--ink-3);max-width:70ch;margin-top:4px}
+.section-head .matches{
+  font-size:12px;color:var(--ink-3);font-weight:600;
+  padding:4px 10px;border-radius:999px;background:var(--paper);border:1px solid var(--line);
+}
+
+.ccard{
+  background:var(--paper);border:1px solid var(--line);
+  border-radius:var(--radius-md);box-shadow:var(--shadow-card);
+  padding:16px;display:flex;flex-direction:column;gap:10px;
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.ccard:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.ccard-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.ccard-title{font-family:var(--display);font-weight:600;font-size:14.5px;line-height:1.25;color:var(--ink);letter-spacing:-.005em}
+.platform{
+  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-3);border:1px solid var(--line);border-radius:999px;
+  padding:2px 8px;flex-shrink:0;
+}
+.ccard p{font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px}
+.tag{
+  font-size:11px;font-weight:500;padding:3px 9px;border-radius:999px;
+  border:1px solid transparent;
+}
+.tag.market{background:var(--market-soft);color:var(--market)}
+.tag.leaf{background:var(--leaf-soft);color:var(--leaf)}
+.tag.policy{background:var(--policy-soft);color:var(--policy)}
+.tag.muted{background:var(--mist);color:var(--ink-3);border-color:var(--line)}
+.hashtags{font-size:11.5px;color:var(--ink-3);word-spacing:2px}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer{
+  background:var(--ink-deep);
+  color:#c9d6e2;
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+  margin:0 24px;
+  padding:56px 48px 28px;
+}
+.footer-inner{max-width:1500px;margin:0 auto}
+.footer-top{
+  display:grid;grid-template-columns:1.2fr 1fr;gap:64px;
+  padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.09);
+}
+.footer-brand{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.footer-brand .brand-name{color:#fff}
+.footer-brand .brand-tag{color:rgba(201,214,226,.6)}
+.footer-desc{font-size:13.5px;line-height:1.6;color:rgba(201,214,226,.72);max-width:48ch;margin-bottom:18px}
+.status-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 12px;border-radius:999px;
+  background:rgba(23,138,107,.16);color:#7fd3b8;
+  font-size:12px;font-weight:500;
+}
+.status-pill .dot{width:7px;height:7px;border-radius:50%;background:#3ec89a;box-shadow:0 0 0 4px rgba(62,200,154,.18)}
+
+.footer-cta h4{font-family:var(--display);font-weight:700;font-size:22px;color:#fff;margin-bottom:8px;letter-spacing:-.01em}
+.footer-cta p{font-size:13.5px;color:rgba(201,214,226,.72);margin-bottom:16px;max-width:46ch}
+.subscribe{display:flex;gap:10px;max-width:420px}
+.subscribe input{
+  flex:1;padding:11px 14px;border-radius:var(--radius-md);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
+  color:#fff;font-size:13.5px;outline:none;
+}
+.subscribe input::placeholder{color:rgba(201,214,226,.45)}
+.subscribe input:focus{border-color:var(--leaf);background:rgba(255,255,255,.09)}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:11px 20px;border-radius:var(--radius-md);
+  background:var(--leaf);color:#fff;font-size:13.5px;font-weight:600;
+  transition:background .15s ease;white-space:nowrap;
+}
+.btn-primary:hover{background:#127558}
+.fineprint{font-size:11.5px;color:rgba(201,214,226,.5);margin-top:10px}
+
+.footer-links{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:32px;
+  padding:40px 0;
+  border-bottom:1px solid rgba(255,255,255,.09);
+}
+.fcol h5{
+  font-family:var(--display);font-weight:600;font-size:12px;
+  letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:14px;
+}
+.fcol a{display:block;font-size:13px;color:rgba(201,214,226,.72);padding:5px 0;transition:color .15s ease}
+.fcol a:hover{color:#fff}
+
+.socials{display:flex;gap:10px;margin-top:14px}
+.socials a{
+  width:32px;height:32px;border-radius:8px;
+  border:1px solid rgba(255,255,255,.14);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(201,214,226,.72);transition:all .15s ease;
+}
+.socials a:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+.socials svg{width:14px;height:14px}
+
+.footer-bottom{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding-top:24px;flex-wrap:wrap;
+}
+.footer-bottom .copyright{font-size:12.5px;color:rgba(201,214,226,.55)}
+.footer-legal{display:flex;gap:22px;flex-wrap:wrap}
+.footer-legal a{font-size:12.5px;color:rgba(201,214,226,.55)}
+.footer-legal a:hover{color:#fff}
+.btn-top{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 14px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.18);color:#fff;
+  font-size:12.5px;font-weight:500;
+  transition:background .15s ease;
+}
+.btn-top:hover{background:rgba(255,255,255,.07)}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1200px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .nav-link{padding:7px 10px;font-size:13px}
+  .nav-row-a{gap:20px;padding:12px 20px}
+  .ticker-wrap{padding:8px 20px;gap:16px}
+  .ticker-items{gap:16px}
+}
+@media (max-width:1000px){
+  .layout{grid-template-columns:1fr}
+  .rail{position:static;flex-direction:row;overflow-x:auto;padding-bottom:4px;gap:10px}
+  .rail-card{min-width:220px;flex-shrink:0}
+  .footer-top{grid-template-columns:1fr;gap:36px}
+  .nav-links{display:none}
+}
+@media (max-width:900px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nav-row-a{grid-template-columns:auto auto;padding:12px 20px}
+  .shell{padding:20px 20px 60px}
+  .hero{padding:22px}
+  .footer{margin:0 12px;padding:40px 24px 22px}
+  .footer-links{grid-template-columns:repeat(2,1fr);gap:24px}
+}
+@media (max-width:640px){
+  .grid{grid-template-columns:1fr}
+  .subscribe{flex-direction:column}
+  .subscribe input,.btn-primary{width:100%}
+  .btn-primary{justify-content:center}
+  .footer-bottom{flex-direction:column;align-items:flex-start}
+  .section-head{flex-direction:column;align-items:flex-start}
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+  .hero{transform:none !important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<header class="nav" id="nav">
+  <div class="nav-row-a">
+    <a class="brand" href="#">
+      <span class="brand-mark">GB</span>
+      <span class="brand-text">
+        <span class="brand-name">Global Bioenergy Watch</span>
+        <span class="brand-tag">Policy, Markets, Sustainability</span>
+      </span>
+    </a>
+
+    <nav class="nav-links">
+      <a class="nav-link active" href="#">Markets</a>
+      <a class="nav-link" href="#">Jurisdiction map</a>
+      <a class="nav-link" href="#">Supply and production</a>
+      <a class="nav-link" href="#">Jobs</a>
+      <a class="nav-link" href="#">Email alerts</a>
+      <a class="nav-link more" href="#">More
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="btn-rescan" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg>
+        Rescan
+      </button>
+      <span class="avatar" title="PI">PI</span>
+    </div>
+  </div>
+
+  <div class="nav-row-b">
+    <div class="ticker-wrap">
+      <span class="ticker-label"><span class="ticker-dot"></span>Markets</span>
+      <div class="ticker-items" id="tickerItems"></div>
+      <span class="ticker-scan">Last scan 18 Sept 2026</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     SHELL
+     ============================================================ -->
+<main class="shell">
+
+  <div class="eyebrow-row">
+    <a href="#">Global Bioenergy Watch</a>
+    <span class="sep">/</span>
+    <a href="#">Markets</a>
+    <span class="sep">/</span>
+    <span>Video briefing room</span>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-inner">
+      <span class="hero-chip">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+        Global Bioenergy Watch
+      </span>
+      <h1>Video briefing room</h1>
+      <p class="hero-sub">YouTube channels and official video hubs, limited to the countries and policies they cover. Every video is tagged to the same jurisdictions, fuels and policy instruments as the rest of the desk.</p>
+
+      <div class="video-frame">
+        <div class="video-grid"></div>
+        <div class="video-center">
+          <div class="video-mark">
+            <span class="dm"></span>
+            <span class="wm">Global Bioenergy Watch</span>
+          </div>
+          <div class="video-kicker">AI-powered global bioenergy outlook</div>
+          <div class="video-rule"></div>
+          <div class="video-tags">
+            <span>Mandates</span><span>·</span>
+            <span>Markets</span><span>·</span>
+            <span>Supply chains</span><span>·</span>
+            <span>One tracker</span>
+          </div>
+        </div>
+        <div class="video-play">
+          <span class="tri"></span>
+          <span>0:00</span>
+        </div>
+        <div class="video-ctrl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FILTER BAR -->
+  <div class="filters">
+    <span class="filter-group-label">Fuel type</span>
+    <button class="chip active" type="button">Ethanol</button>
+    <button class="chip market" type="button">Biodiesel</button>
+    <button class="chip market" type="button">Renewable Diesel</button>
+    <button class="chip market" type="button">SAF</button>
+    <button class="chip leaf" type="button">Biogas</button>
+    <button class="chip policy" type="button">Feedstock</button>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="layout">
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>Country / region <span class="count">12</span></h3>
+        <div class="rail-list">
+          <label class="rail-item"><input type="checkbox" checked> United States</label>
+          <label class="rail-item"><input type="checkbox"> Brazil</label>
+          <label class="rail-item"><input type="checkbox"> European Union</label>
+          <label class="rail-item"><input type="checkbox"> India</label>
+          <label class="rail-item"><input type="checkbox"> Indonesia</label>
+          <label class="rail-item"><input type="checkbox"> Canada</label>
+        </div>
+      </div>
+      <div class="rail-card">
+        <h3>Fuel type <span class="count">6</span></h3>
+        <div class="rail-list">
+          <label class="rail-item"><input type="checkbox" checked> Ethanol</label>
+          <label class="rail-item"><input type="checkbox"> Biodiesel</label>
+          <label class="rail-item"><input type="checkbox"> Renewable diesel</label>
+          <label class="rail-item"><input type="checkbox"> SAF</label>
+          <label class="rail-item"><input type="checkbox"> Biogas</label>
+        </div>
+      </div>
+      <div class="rail-card">
+        <h3>Policy instrument <span class="count">5</span></h3>
+        <div class="rail-list">
+          <label class="rail-item"><input type="checkbox"> Mandates</label>
+          <label class="rail-item"><input type="checkbox"> Subsidies</label>
+          <label class="rail-item"><input type="checkbox"> Carbon pricing</label>
+          <label class="rail-item"><input type="checkbox"> Trade measures</label>
+        </div>
+      </div>
+    </aside>
+
+    <div class="feed">
+      <div class="feed-head">
+        <div>
+          <h2>Live search — YouTube &amp; web</h2>
+          <p id="feedSub">Ethanol · biodiesel · renewable diesel · sustainable aviation fuel</p>
+        </div>
+        <button class="btn-refresh" type="button" id="refreshBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg>
+          Refresh
+        </button>
+      </div>
+
+      <div class="grid" id="videoGrid"></div>
+      <div class="sentinel" id="sentinel"></div>
+      <div class="end-marker" id="endMarker" style="display:none">You’ve reached the end of the feed</div>
+      <button class="load-more" id="loadMore" type="button">Load more</button>
+    </div>
+  </div>
+
+  <!-- CHANNELS SECTION -->
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Channels &amp; official video hubs</h2>
+        <p class="lead">Every video hub is tagged to the same countries, regions, fuels and policy instruments as the feed — the filters on the left apply here too.</p>
+      </div>
+      <span class="matches">14 matches</span>
+    </div>
+
+    <div class="grid" id="channelGrid"></div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="footer-inner">
+
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">
+          <span class="brand-mark">GB</span>
+          <span class="brand-text">
+            <span class="brand-name">Global Bioenergy Watch</span>
+            <span class="brand-tag">Policy, Markets, Sustainability</span>
+          </span>
+        </div>
+        <p class="footer-desc">A real-time intelligence desk tracking bioenergy policy, markets, companies and owners across every jurisdiction — from ethanol and biodiesel to SAF and emerging feedstocks like UCO.</p>
+        <span class="status-pill"><span class="dot"></span> Systems operational · Last scan 18 Sept 2026</span>
+      </div>
+
+      <div class="footer-cta">
+        <h4>Get the daily brief</h4>
+        <p>AI-summarised policy and market updates from around the world, delivered once a day.</p>
+        <form class="subscribe" onsubmit="event.preventDefault()">
+          <input type="email" placeholder="you@example.com" aria-label="Email address">
+          <button class="btn-primary" type="submit">Subscribe →</button>
+        </form>
+        <div class="fineprint">No spam. Unsubscribe anytime.</div>
+      </div>
+    </div>
+
+    <div class="footer-links">
+      <div class="fcol">
+        <h5>Platform</h5>
+        <a href="#">Live markets</a>
+        <a href="#">Last updates</a>
+        <a href="#">Jurisdiction map</a>
+        <a href="#">Supply &amp; production</a>
+        <a href="#">Email alerts</a>
+      </div>
+      <div class="fcol">
+        <h5>Coverage</h5>
+        <a href="#">Ethanol</a>
+        <a href="#">Biodiesel</a>
+        <a href="#">Sustainable aviation fuel</a>
+        <a href="#">Used cooking oil (UCO)</a>
+        <a href="#">Blending mandates</a>
+      </div>
+      <div class="fcol">
+        <h5>Company</h5>
+        <a href="#">About us</a>
+        <a href="#">Method &amp; data flow</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="fcol">
+        <h5>Contact</h5>
+        <a href="mailto:hello@globalbioenergywatch.com">hello@globalbioenergywatch.com</a>
+        <a href="mailto:press@globalbioenergywatch.com">press@globalbioenergywatch.com</a>
+        <a href="#">Submit a tip</a>
+        <a href="#">Advertise</a>
+        <div class="socials">
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05C20.4 8.65 21 11.1 21 14.2V21h-4v-6c0-1.4-.03-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H9z"/></svg></a>
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7 8 8.2 12h-6.4l-5-7.3L5.9 22H2.8l7.5-8.6L2.5 2h6.6l4.5 6.6zM17.8 20h1.8L7.3 3.9H5.4z"/></svg></a>
+          <a href="#" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span class="copyright">© 2026 Global Bioenergy Watch. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy policy</a>
+        <a href="#">Terms of use</a>
+        <a href="#">Cookies</a>
+        <a href="#">Disclaimer</a>
+      </div>
+      <button class="btn-top" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top ↑</button>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     SCRIPT
+     ============================================================ -->
+<script>
+/* ---------- Ticker (static, evenly spread) ---------- */
+const tickers = [
+  ['WTI Crude','89.06','-5.72%','down'],
+  ['S&P 500','7850.50','+0.17%','up'],
+  ['Natural Gas','2.91','+0.39%','up'],
+  ['Brent Crude','93.41','-4.92%','down'],
+  ['Ethanol (CBOT)','2.31','+0.85%','up'],
+  ['Soybean oil','54.72','+1.29%','up'],
+  ['RIN D6','1.88','+2.34%','up'],
+  ['Corn','4.82','-0.40%','down']
+];
+document.getElementById('tickerItems').innerHTML = tickers.map(([n,v,c,k]) =>
+  `<span class="ticker-item"><span class="ticker-name">${n}</span><span class="ticker-val">${v}</span><span class="ticker-chg ${k}">${c}</span></span>`
+).join('');
+
+/* ---------- Navbar shadow on scroll ---------- */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 4);
+}, {passive:true});
+
+/* ---------- Hero 3D tilt ---------- */
+(() => {
+  const hero = document.getElementById('hero');
+  if (!hero || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  hero.addEventListener('mousemove', e => {
+    const r = hero.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    const rx = (-y * 5).toFixed(2);
+    const ry = ( x * 5).toFixed(2);
+    hero.style.transform = `perspective(1200px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+  });
+  hero.addEventListener('mouseleave', () => { hero.style.transform = ''; });
+})();
+
+/* ---------- Stub data ---------- */
+const VIDEO_TITLES = [
+  ['Bioenergy: policy framework, technological development and social attitudes','ETIP Bioenergy','3y ago','12:04'],
+  ['Bio Energy Policy 2022 #Upneda #bioenergy #renewableenergy','UP NEDA','2y ago','08:22'],
+  ['Webinar – Brazil’s Bioenergy Success: Insights from industry, academia and policy','World Bioenergy Association','1y ago','1:04:11'],
+  ['EU sustainability criteria for bioenergy [Policy Podcast]','European Parliamentary Research Service','7y ago','24:37'],
+  ['UP Bio Energy Policy 2022 #kip #up #bioenergy #policy #2022 #biomassbusiness #biomasspellets','AEPI: Biomass Sustainability Consultant','1y ago','06:15'],
+  ['UP Launched Bioenergy Policy 2022 | Impact and Challenges of Bioenergy Policy in India','Study IQ IAS','2y ago','11:42'],
+  ['Is This the End of U.S. Biofuels? | Peter Zeihan','Zeihan on Geopolitics','1mo ago','09:58'],
+  ['National Policy on Bio-fuels 2018 – Difference between Basic & Advanced Bio-fuels explained','StudyIQ IAS','4y ago','14:20'],
+  ['Indonesia biodiesel expansion: Government prepared to roll out mandate for 50% palm-based fuel blend','Reuters','2mo ago','03:41'],
+  ['Ethanol blending in India – Progress, challenges and outlook','NITI Aayog','1y ago','18:02'],
+  ['Renewable Fuel Standards – year in review','Iowa RFA','3mo ago','07:12'],
+  ['Advanced Biofuels: the next frontier','IEA Bioenergy','5mo ago','22:36'],
+  ['Sustainable aviation fuel mandates across Europe','Transport & Environment','4mo ago','15:09'],
+  ['Canada Clean Fuel Regulations — compliance primer','Environment and Climate Change Canada','6mo ago','31:18'],
+  ['Brazil RenovaBio — CBIO market update','Ministry of Mines and Energy, Brazil','2mo ago','19:44'],
+  ['RIN D6 markets: what moved this quarter','OPIS','1mo ago','10:03'],
+  ['Biogas in the EU: policy and pipeline','European Biogas Association','3mo ago','13:55'],
+  ['Feedstock outlook: UCO, tallow, corn oil','Argus Media','2mo ago','16:30'],
+  ['SAF take-off: which mandates actually bite?','ICCT','5mo ago','27:11'],
+  ['India Ethanol Blended Petrol Programme — briefing','MoPNG','1y ago','20:00'],
+  ['Indonesia B40 & palm-based biodiesel coverage','Reuters','3mo ago','04:55'],
+  ['US DOE Bioenergy Technologies Office: programme overview','US DOE','2y ago','36:20'],
+  ['RFA — ethanol policy briefings from Washington','Renewable Fuels Association','2mo ago','09:15'],
+  ['Net Zero Roadmap — bioenergy chapter','IEA','1y ago','44:18']
+];
+
+const CHANNELS = [
+  ['IEA Bioenergy — reports, webinars and explainers','YouTube','Intergovernmental panel on bioenergy deployment and policy design.','United States, Brazil, EU','Ethanol, Biodiesel, Biogas','Net Zero Roadmap · Bioenergy sustainability criteria'],
+  ['IRENA — renewable fuels & transport decarbonisation','YouTube','Country biofuel roadmaps and energy transition outlooks.','Global, Africa, APAC, Europe, LATAM','Ethanol, Biodiesel, SAF','IRENA, Energy Transition, Innovation'],
+  ['US DOE — Bioenergy Technologies Office video library','Web','Programme reviews on renewable diesel, SAF and feedstock supply.','North America','Renewable Diesel, SAF, Feedstock','SAF Grand Challenge · Clean Fuels Production'],
+  ['Renewable Fuels Association — ethanol policy briefings','YouTube','RFS volumes, year-round E15 and carbon scoring for US ethanol.','North America','Ethanol','RFS, RIN, E15'],
+  ['Canada Clean Fuel Regulations explainers','Web','How the Clean Fuel Regulations credit market and compliance work.','North America','Renewable Diesel, Ethanol','Clean Fuel Regulations'],
+  ['ePURE — European renewable ethanol','YouTube','RED III transposition, blending obligations and low-carbon requirements.','Europe','Ethanol','RED III, Fit for 55, Ethanol'],
+  ['European Commission — Energy','YouTube','Official EU channel: RED III, ReFuelEU Aviation and Fit for 55.','Europe','Renewable Diesel, SAF, Biogas','RED III, Fit for 55'],
+  ['UK Department for Transport — RTFO & SAF mandate','Web','Renewable Transport Fuel Obligation and the UK SAF mandate.','Europe','SAF, Biodiesel','RTFO, UK SAF Mandate'],
+  ['ICAO — sustainable aviation fuel programme','Web','CORSIA rules, SAF eligibility and the global aviation fuel framework.','Global','SAF','CORSIA, ICAO TAG'],
+  ['UNICA — Brazilian sugarcane & bioenergy','YouTube','RenovaBio, CBIO trading and Brazil’s blending policy.','Latin America','Ethanol','RenovaBio, CBIO'],
+  ['India — Ethanol Blended Petrol Programme briefings','YouTube','E20 rollout, flex-fuel vehicles and feedstock diversification in India.','Asia-Pacific','Ethanol','EBP, Ethanol Blending'],
+  ['Indonesia B40 & palm-based biodiesel coverage','Web','B40 mandate implementation, levies and palm feedstock supply.','Asia-Pacific','Biodiesel','B40 Mandate']
+];
+
+/* ---------- Helpers ---------- */
+function vcard(v, i) {
+  const el = document.createElement('article');
+  el.className = 'vcard';
+  el.style.animationDelay = (i % 8) * 60 + 'ms';
+  el.innerHTML = `
+    <div class="vthumb">
+      <div class="ph">Thumbnail</div>
+      <span class="src">${v[1]}</span>
+      <span class="dur">${v[3]}</span>
+    </div>
+    <div class="vbody">
+      <div class="vtitle">${v[0]}</div>
+      <div class="vmeta"><span>${v[1]}</span><span class="dot"></span><span>${v[2]}</span></div>
+    </div>`;
+  return el;
+}
+
+function ccard(c) {
+  const el = document.createElement('article');
+  el.className = 'ccard';
+  el.innerHTML = `
+    <div class="ccard-head">
+      <div class="ccard-title">${c[0]}</div>
+      <span class="platform">${c[1]}</span>
+    </div>
+    <p>${c[2]}</p>
+    <div class="tag-row">${c[3].split(',').map(t=>`<span class="tag market">${t.trim()}</span>`).join('')}</div>
+    <div class="tag-row">${c[4].split(',').map(t=>`<span class="tag leaf">${t.trim()}</span>`).join('')}</div>
+    <div class="hashtags">${c[5]}</div>`;
+  return el;
+}
+
+function skeleton() {
+  const el = document.createElement('div');
+  el.className = 'skel';
+  el.innerHTML = `<div class="bar thumb-bar"></div><div class="bar line"></div><div class="bar line short"></div>`;
+  return el;
+}
+
+/* ---------- Infinite scroll ---------- */
+const grid = document.getElementById('videoGrid');
+const sentinel = document.getElementById('sentinel');
+const endMarker = document.getElementById('endMarker');
+const loadMoreBtn = document.getElementById('loadMore');
+
+const BATCH = 8;
+let cursor = 0;
+let loading = false;
+let done = false;
+
+function loadBatch() {
+  if (loading || done) return;
+  loading = true;
+
+  const skels = [];
+  for (let i = 0; i < BATCH; i++) {
+    const s = skeleton();
+    grid.appendChild(s); skels.push(s);
+  }
+
+  setTimeout(() => {
+    skels.forEach(s => s.remove());
+    const slice = VIDEO_TITLES.slice(cursor, cursor + BATCH);
+    slice.forEach((v, i) => grid.appendChild(vcard(v, i)));
+    cursor += slice.length;
+
+    if (cursor >= VIDEO_TITLES.length) {
+      done = true;
+      endMarker.style.display = 'block';
+      if (io) io.disconnect();
+    }
+    loading = false;
+  }, 500);
+}
+
+let io = null;
+if ('IntersectionObserver' in window) {
+  io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) loadBatch(); });
+  }, { rootMargin: '300px 0px' });
+  io.observe(sentinel);
+}
+loadMoreBtn.addEventListener('click', loadBatch);
+
+if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+  loadMoreBtn.style.display = 'inline-block';
+  while (!done) {
+    const slice = VIDEO_TITLES.slice(cursor, cursor + BATCH);
+    slice.forEach((v, i) => grid.appendChild(vcard(v, i)));
+    cursor += slice.length;
+    if (cursor >= VIDEO_TITLES.length) { done = true; endMarker.style.display='block'; }
+  }
+} else {
+  loadBatch();
+}
+
+/* ---------- Channel grid (static) ---------- */
+const cg = document.getElementById('channelGrid');
+CHANNELS.forEach(c => cg.appendChild(ccard(c)));
+
+/* ---------- Refresh feedback ---------- */
+document.getElementById('refreshBtn').addEventListener('click', function () {
+  const btn = this;
+  btn.style.opacity = '0.5';
+  setTimeout(() => { btn.style.opacity = '1'; }, 500);
+});
+</script>
+</body>
+</html>
